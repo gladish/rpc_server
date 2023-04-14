@@ -1,0 +1,23 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+
+
+package org.rdk.bluetooth;
+
+option cc_generic_services = true;
+
+message Error {
+  int32 code = 1;
+  string message = 2;
+}
+
+message StartScanRequest {
+}
+
+message StartScanResponse {
+}
+
+service BluetoothService {
+  rpc StartScan(StartScanRequest) returns (StartScanResponse);
+  rpc StopScan(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
