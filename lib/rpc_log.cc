@@ -2,16 +2,16 @@
 #include "rpc_controller.h"
 
 #include <cstdarg>
-#include <ctime>
 #include <cstdio>
+#include <ctime>
 #include <sstream>
 #include <sys/time.h>
 
 rdk::rpc::LogLevel curent_log_level = rdk::rpc::LogLevel::Info;
 
-void rdk::rpc::log_printf(rdk::rpc::LogLevel level, const char *format, ...)
+void rdk::rpc::log_printf(rdk::rpc::LogLevel level, const char* format, ...)
 {
-  const char *level_strings[] = {
+  const char* level_strings[] = {
     "none",
     "debug",
     "info",
@@ -41,7 +41,7 @@ void rdk::rpc::log_printf(rdk::rpc::LogLevel level, const char *format, ...)
   }
 }
 
-void rdk::rpc::throw_error(int code, const char *format, ...)
+void rdk::rpc::throw_error(int code, const char* format, ...)
 {
   va_list args;
   va_start(args, format);
@@ -51,4 +51,4 @@ void rdk::rpc::throw_error(int code, const char *format, ...)
   va_end(args);
 
   throw rdk::rpc::Error(buff, code);
-}                                    
+}

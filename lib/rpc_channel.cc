@@ -12,26 +12,25 @@
 
 using ServiceConstructor = google::protobuf::Service* (*)();
 
-
-google::protobuf::Service* rdk::rpc::InProcChannel::FindServiceByName(const std::string &service_name)
-{  
+google::protobuf::Service* rdk::rpc::InProcChannel::FindServiceByName(const std::string& service_name)
+{
   auto itr = m_services.find(service_name);
   return (itr != std::end(m_services))
     ? itr->second
-    : nullptr;      
+    : nullptr;
 }
 
 void rdk::rpc::InProcChannel::RegisterService(google::protobuf::Service* service)
-{  
-  m_services.insert(std::make_pair(service->GetDescriptor()->full_name(), service));  
+{
+  m_services.insert(std::make_pair(service->GetDescriptor()->full_name(), service));
 }
 
 void rdk::rpc::InProcChannel::CallMethod(
-    const google::protobuf::MethodDescriptor *method,
-    google::protobuf::RpcController *controller,
-    const google::protobuf::Message *request,
-    google::protobuf::Message *response,
-    google::protobuf::Closure *done)
+  const google::protobuf::MethodDescriptor* method,
+  google::protobuf::RpcController* controller,
+  const google::protobuf::Message* request,
+  google::protobuf::Message* response,
+  google::protobuf::Closure* done)
 {
   auto service = FindServiceByName(method->service()->full_name());
   if (!service) {
@@ -40,7 +39,6 @@ void rdk::rpc::InProcChannel::CallMethod(
     buff << method->service()->full_name();
     controller->SetFailed(buff.str());
     return;
-  }
-  else
+  } else
     service->CallMethod(method, controller, request, response, done);
 }

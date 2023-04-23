@@ -1,25 +1,25 @@
 #include "rpc_server.h"
 
-#include <google/protobuf/text_format.h>
 #include <google/protobuf/io/zero_copy_stream_impl.h>
+#include <google/protobuf/text_format.h>
 
 #include <fstream>
+#include <getopt.h>
 #include <sstream>
 #include <stdexcept>
-#include <getopt.h>
 
-void read_server_config_from_file(rdk::rpc::RpcServerConfiguration &conf, const char *config_file);
+void read_server_config_from_file(rdk::rpc::RpcServerConfiguration& conf, const char* config_file);
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
-   GOOGLE_PROTOBUF_VERIFY_VERSION;
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-  const char *config_file = nullptr;    
+  const char* config_file = nullptr;
 
   while (true) {
     static struct option long_options[] = {
-      {"config", required_argument, 0, 'c'},
-      {0, 0, 0, 0}
+      { "config", required_argument, 0, 'c' },
+      { 0, 0, 0, 0 }
     };
 
     int option_index = 0;
@@ -28,32 +28,32 @@ int main(int argc, char *argv[])
       break;
 
     switch (c) {
-      case 'c':
-        config_file = optarg;
-        break;
-      default:
-        break;
+    case 'c':
+      config_file = optarg;
+      break;
+    default:
+      break;
     }
   }
 
   rdk::rpc::RpcServerConfiguration conf;
   read_server_config_from_file(conf, config_file);
-    
+
   RpcServer ws_server(conf);
-  ws_server.Run();  
+  ws_server.Run();
 
   google::protobuf::ShutdownProtobufLibrary();
 
   return 0;
 }
 
-void read_server_config_from_file(rdk::rpc::RpcServerConfiguration &conf, const char *config_file)
+void read_server_config_from_file(rdk::rpc::RpcServerConfiguration& conf, const char* config_file)
 {
   std::ifstream infile(config_file);
   if (!infile.is_open()) {
     std::stringstream message;
     message << "Faile to open config file:" << config_file;
-    throw std::runtime_error(message.str());    
+    throw std::runtime_error(message.str());
   }
 
   google::protobuf::io::IstreamInputStream input(&infile);
